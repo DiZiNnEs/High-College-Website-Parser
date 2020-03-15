@@ -1,10 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
-from urllib.request import urlopen
 from textwrap import dedent
+import json
 
 headers = {
-    'cookie': 'SOVASESSION_ID=aoqf02h693q3502fivesag6li1'
+    'cookie': 'SOVASESSION_ID=vka75ted6n79oicnds9n8u5rab'
 }
 
 page = f'http://vk-sova.3w.kz/users/'
@@ -18,19 +18,28 @@ def parser_sova(headers, page):
         for users in soup.find_all('tr'):
             name = users.select_one(':nth-child(3) a')
             ip = users.select_one(':nth-child(4) span')
-            ip2 = users.select_one(':nth-child(5) span')
             first_ip = ip['title'] if ip is not None else None
-            second_ip = ip2['title'] if ip2 is not None else None
             print(dedent(f'''\
             --------------------------------------------------
                 Full name : {name.contents}
                 IP from the last entry point: {first_ip}
-                IP from the place of registration: {second_ip}
             --------------------------------------------------
             '''))
-
     else:
         print('error')
 
-print(page)
-parser_sova(headers, page)
+
+def json_add():
+    name = parser_sova(headers, page)
+    first_ip = parser_sova(headers, page)
+    a = [name, first_ip]
+    persons = {"Full name": name,
+               "IP from the last entry point": first_ip,
+               }
+    with open('users.json', 'w') as file:
+        json.dump(persons, file, indent=2, ensure_ascii=False)
+
+
+if __name__ == '__main__':
+    parser_sova(headers, page)
+    json_add()
