@@ -1,11 +1,10 @@
 import requests
-from bs4 import BeautifulSoup
-from textwrap import dedent
 import json
 
-headers = {
-    'cookie': 'SOVASESSION_ID=rkadh1uilt41i1gc20t2cd8nmh'
-}
+from bs4 import BeautifulSoup
+from textwrap import dedent
+
+from cookie import headers
 
 page = f'http://vk-sova.3w.kz/users/'
 
@@ -42,4 +41,4 @@ def parser_sova(headers, page):
 
 if __name__ == '__main__':
     parser_sova(headers, page)
-    #json_add()
+    # json_add()

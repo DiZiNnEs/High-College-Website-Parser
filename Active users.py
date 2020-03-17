@@ -1,11 +1,10 @@
 import requests
-from bs4 import BeautifulSoup
-from textwrap import dedent
 import json
 
-headers = {
-    'cookie': 'SOVASESSION_ID=rkadh1uilt41i1gc20t2cd8nmh'
-}
+from bs4 import BeautifulSoup
+from textwrap import dedent
+
+from cookie import headers
 
 page = 'http://vk-sova.3w.kz/users/index?sort_key=lastlogin&t=d'
 
@@ -16,17 +15,20 @@ def parser_sova(headers, page):
     if request.status_code == 200:
         soup = BeautifulSoup(request.content, 'html.parser')
         for users in soup.find_all('tr'):
-            date_time = users.select_one(':nth-child(4) span')
-            name = users.select_one(':nth-child(3) a')
-            ip = users.select_one(':nth-child(4) span')
-            first_ip = ip['title'] if ip is not None else None
-            print(dedent(f'''\
-            --------------------------------------------------
-                Full name : {name.string}
-                Date / Time entry: {date_time}
-                IP from the last entry point: {first_ip}
-            --------------------------------------------------
-            '''))
+            try:
+                date_time = users.select_one(':nth-child(4) span').text
+                name = users.select_one(':nth-child(3) a')
+                ip = users.select_one(':nth-child(4) span')
+                first_ip = ip['title'] if ip is not None else None
+                print(dedent(f'''\
+                --------------------------------------------------
+                    Full name : {name.string}
+                    Date / Time entry: {date_time}
+                    IP from the last entry point: {first_ip}
+                --------------------------------------------------
+                '''))
+            except:
+                pass
     else:
         print('error')
 
