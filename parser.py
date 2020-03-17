@@ -15,17 +15,22 @@ def parser_sova(headers, page):
     if request.status_code == 200:
         soup = BeautifulSoup(request.content, 'html.parser')
         for users in soup.find_all('tr'):
-            name = users.select_one(':nth-child(3) a')
-            ip = users.select_one(':nth-child(4) span')
-            first_ip = ip['title'] if ip is not None else None
-            print(dedent(f'''\
-            --------------------------------------------------
-                Full name : {name.string}
-                IP from the last entry point: {first_ip}
-            --------------------------------------------------
-            '''))
+            try:
+                name = users.select_one(':nth-child(3) a')
+                ip = users.select_one(':nth-child(4) span')
+                date_time = users.select_one(':nth-child(4) span').text
+                first_ip = ip['title'] if ip is not None else None
+                print(dedent(f'''\
+                --------------------------------------------------
+                    Full name : {name.string}
+                    IP from the last entry point: {first_ip}
+                    Last login date: {date_time}
+                --------------------------------------------------
+                '''))
+            except:
+                pass
     else:
-        print('error')
+        print('Some mistake :3')
 
 
 # def json_add():

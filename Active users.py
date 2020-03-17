@@ -6,12 +6,24 @@ from textwrap import dedent
 
 from cookie import headers
 
+
 page = 'http://vk-sova.3w.kz/users/index?sort_key=lastlogin&t=d'
 
-
-def parser_sova(headers, page):
+def parser_sova_pages(headers, page):
     session = requests.Session()
     request = session.get(page, headers=headers)
+    if request.status_code == 200:
+        soup = BeautifulSoup(request.content, 'html.parser')
+        for pages in soup.find_all('ul', attrs={'class': 'pages'}):
+            for a in pages.find_all('a'):
+                b = a['href']
+                print(dedent(f'''\
+                Number page: {a.string}, link = {b}
+                '''))
+
+def parser_sova(headers, page):
+    #session = requests.Session()
+    request = requests.get(page, headers=headers)
     if request.status_code == 200:
         soup = BeautifulSoup(request.content, 'html.parser')
         for users in soup.find_all('tr'):
@@ -28,7 +40,7 @@ def parser_sova(headers, page):
                 --------------------------------------------------
                 '''))
             except:
-                pass
+                print('Some mistake :3')
     else:
         print('error')
 
@@ -45,5 +57,6 @@ def parser_sova(headers, page):
 
 
 if __name__ == '__main__':
+    parser_sova_pages(headers, page)
     parser_sova(headers, page)
     # json_add()
