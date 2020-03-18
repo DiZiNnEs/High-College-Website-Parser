@@ -10,25 +10,24 @@ page = f'http://vk-sova.3w.kz/users/'
 
 
 def parser_sova(headers, page):
-    session = requests.Session()
-    request = session.get(page, headers=headers)
-    if request.status_code == 200:
-        soup = BeautifulSoup(request.content, 'html.parser')
-        for users in soup.find_all('tr'):
-            try:
-                name = users.select_one(':nth-child(3) a')
-                ip = users.select_one(':nth-child(4) span')
-                date_time = users.select_one(':nth-child(4) span').text
-                first_ip = ip['title'] if ip is not None else None
-                print(dedent(f'''\
-                --------------------------------------------------
-                    Full name : {name.string}
-                    IP from the last entry point: {first_ip}
-                    Last login date: {date_time}
-                --------------------------------------------------
-                '''))
-            except:
-                pass
+    response = requests.get(page, headers=headers)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.content, 'html.parser')
+    for users in soup.find_all('tr'):
+        try:
+            name = users.select_one(':nth-child(3) a')
+            ip = users.select_one(':nth-child(4) span')
+            date_time = users.select_one(':nth-child(4) span').text
+            first_ip = ip['title'] if ip is not None else None
+            print(dedent(f'''\
+            --------------------------------------------------
+                Full name : {name.string}
+                IP from the last entry point: {first_ip}
+                Last login date: {date_time}
+            --------------------------------------------------
+            '''))
+        except:
+            pass
     else:
         print('Some mistake :3')
 
