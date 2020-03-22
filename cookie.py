@@ -1,3 +1,3 @@
 headers = {
-    'cookie': 'SOVASESSION_ID=gh5puu72aan7gb1o95pms8oc13'
+    'cookie': 'SOVASESSION_ID=ifpvs2blibgvr7r37q085ddbnn'
 }
