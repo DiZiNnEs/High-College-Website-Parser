@@ -19,7 +19,6 @@ def parser_sova_pages(headers, page):
             every_page_output = every_page['href']
             page_storage.append('http://vk-sova.3w.kz' + every_page_output)
             ready_page_storage = page_storage[:-1]
-            # return ready_page_storage
         return page_storage
 
 
@@ -34,7 +33,7 @@ def last_users():
                 date_time = users.select_one(':nth-child(4) span').text
                 name = users.select_one(':nth-child(3) a')
                 ip = users.select_one(':nth-child(4) span')
-                first_ip = ip['title'] if ip is not None else None
+                first_ip = ip['title'] if ip is not None else Nonek
                 print(dedent(f'''\
                     --------------------------------------------------
                         Full name : {name.string}
@@ -48,17 +47,5 @@ def last_users():
             print('')
 
 
-# def json_add():
-#     name = parser_sova(headers, page)
-#     first_ip = parser_sova(headers, page)
-#     a = [name, first_ip]
-#     persons = {"Full name": name,
-#                "IP from the last entry point": first_ip,
-#                }
-#     with open('users.json', 'w') as file:
-#         json.dump(persons, file, indent=2, ensure_ascii=False)
-
-
 if __name__ == '__main__':
     last_users()
-    # json_add()

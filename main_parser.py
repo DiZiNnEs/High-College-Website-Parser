@@ -1,5 +1,6 @@
 import requests
 import json
+import csv
 
 from bs4 import BeautifulSoup
 from textwrap import dedent
@@ -12,7 +13,7 @@ def parser_sova(headers, users_url):
     for all_page_parser in users_url:
         all_page = all_page_parser
         response = requests.get(all_page, headers=headers)
-        response.raise_for_status()
+        response.raise_for_status(),
         soup = BeautifulSoup(response.content, 'html.parser')
         for users in soup.find_all('tr'):
             try:
@@ -33,18 +34,5 @@ def parser_sova(headers, users_url):
             print('Next page ------------------------------------------------------------------------- Next page')
 
 
-# def json_add():
-#     name = parser_sova(headers, page)
-#     first_ip = parser_sova(headers, page)
-#     a = [name, first_ip]
-#     persons = {"Full name": name,
-#                "IP from the last entry point": first_ip,
-#                }
-#     with open('users.json', 'w') as file:
-#         json.dump(persons, file, indent=2, ensure_ascii=False)
-
-
 if __name__ == '__main__':
-    # pass
     parser_sova(headers, users_url)
-    # json_add()
