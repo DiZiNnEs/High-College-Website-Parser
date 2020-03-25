@@ -1,9 +1,7 @@
 import requests
 import json
-import csv
 
 from bs4 import BeautifulSoup
-from textwrap import dedent
 
 from cookie import headers
 from urls import users_url
@@ -21,13 +19,19 @@ def parser_sova(headers, users_url):
                 ip = users.select_one(':nth-child(4) span')
                 date_time = users.select_one(':nth-child(4) span').text
                 first_ip = ip['title'] if ip is not None else None
-                print(dedent(f'''\
-                --------------------------------------------------
-                    Full name : {name.string}
-                    IP from the last entry point: {first_ip}
-                    Last login date: {date_time}
-                --------------------------------------------------
-                '''))
+
+                for to_json in name, date_time, first_ip:
+                    persons = {
+                        "user": {
+                            "name:": to_json.string,
+                            "IP from the last entry point": first_ip,
+                            "Last login date": date_time
+                        }
+                    }
+
+                    with open('users.json', 'a') as json_file:
+                        json.dump(persons, json_file, indent=5, ensure_ascii=False, sort_keys=True)
+
             except:
                 print('')
         else:
