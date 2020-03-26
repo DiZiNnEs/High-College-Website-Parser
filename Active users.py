@@ -31,9 +31,9 @@ def last_users():
         for users in soup.find_all('tr'):
             try:
                 date_time = users.select_one(':nth-child(4) span').text
-                name = users.select_one(':nth-child(3) a')
+                name = users.select_one(':nth-child(3) a').string
                 ip = users.select_one(':nth-child(4) span')
-                first_ip = ip['title'] if ip is not None else Nonek
+                first_ip = ip['title'] if ip is not None else None
                 print(dedent(f'''\
                     --------------------------------------------------
                         Full name : {name.string}
@@ -41,6 +41,16 @@ def last_users():
                         IP from the last entry point: {first_ip}
                     --------------------------------------------------
                     '''))
+                for to_json in name, date_time, first_ip:
+                    persons = {
+                        "Full name": name,
+                        "Date / Time entry": date_time,
+                        "IP from the last entry point": first_ip
+                    }
+
+                with open('active_users.json', 'a') as file:
+                    json.dump(persons, file, indent=3, ensure_ascii=False)
+
             except:
                 print('')
         else:

@@ -22,15 +22,13 @@ def parser_sova(headers, users_url):
 
                 for to_json in name, date_time, first_ip:
                     persons = {
-                        "user": {
-                            "name:": to_json.string,
-                            "IP from the last entry point": first_ip,
-                            "Last login date": date_time
-                        }
-                    }
+                                  "name": to_json.string,
+                                  "IP from the last entry point": first_ip,
+                                  "Last login date": date_time
+                              },
 
-                    with open('users.json', 'a') as json_file:
-                        json.dump(persons, json_file, indent=5, ensure_ascii=False, sort_keys=True)
+                    with open('main_users.json', 'a') as json_file:
+                        json.dump(persons, json_file, indent=3, ensure_ascii=False)
 
             except:
                 print('')
